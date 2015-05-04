@@ -1,6 +1,5 @@
 module Main where
 
-import Control.Concurrent
 import Forks
 import Philosophers
 
@@ -17,6 +16,6 @@ main = do
 
     putStrLn "Running the philosophers. Press enter to quit."
 
-    mapM_ forkIO philosophersWithForks
+    startPhilosophers philosophersWithForks
     -- All threads exit when the main thread exits.
     getLine

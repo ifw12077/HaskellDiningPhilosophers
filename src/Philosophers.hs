@@ -30,3 +30,6 @@ runPhilosopher name (left, right) = forever $ do
 
     delay2 <- randomRIO (1, 10)
     threadDelay (delay2 * 1000000)
+
+startPhilosophers :: [IO ()] -> [IO ThreadId] --(IO () -> [ThreadId]) -> [IO ()] -> [()]
+startPhilosophers = mapM_ forkIO
