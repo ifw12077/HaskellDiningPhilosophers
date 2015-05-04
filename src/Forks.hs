@@ -1,6 +1,6 @@
 module Forks where
 
-import Control.Concurrent.STM
+import Control.Concurrent.STM   (TMVar, STM, newTMVarIO, takeTMVar, putTMVar)
 
 type Fork = TMVar Int
 

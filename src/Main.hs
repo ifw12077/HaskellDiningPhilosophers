@@ -1,7 +1,7 @@
 module Main where
 
-import Forks
-import Philosophers
+import Forks        (newFork)
+import Philosophers (runPhilosopher, startPhilosophers)
 
 philosophers :: [String]
 philosophers = ["Aristotle", "Kant", "Spinoza", "Marx", "Russel"]

@@ -1,10 +1,10 @@
 module Philosophers where
 
-import Control.Monad
-import Control.Concurrent
-import Control.Concurrent.STM
-import System.Random
-import Forks
+import Control.Monad            (forever)
+import Control.Concurrent       (threadDelay, forkIO)
+import Control.Concurrent.STM   (atomically)
+import System.Random            (randomRIO)
+import Forks                    (Fork, takeFork, releaseFork)
 
 type Name = String
 
