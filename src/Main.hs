@@ -17,5 +17,6 @@ main = do
     putStrLn "Running the philosophers. Press enter to quit."
 
     startPhilosophers philosophersWithForks
+
     -- All threads exit when the main thread exits.
     getLine
