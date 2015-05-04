@@ -20,16 +20,16 @@ runPhilosopher name (left, right) = forever $ do
         return (leftNum, rightNum)
 
     putStrLn (name ++ " got forks " ++ show leftNum ++ " and " ++ show rightNum ++ " and is now eating.")
-    delay <- randomRIO (1,10)
-    threadDelay (delay * 1000000) -- 1, 10 seconds. threadDelay uses nanoseconds.
+    eatDelay <- randomRIO (1,10)
+    threadDelay (eatDelay * 1000000) -- 1, 10 seconds. threadDelay uses nanoseconds.
     putStrLn (name ++ " is done eating. Going back to thinking.")
 
     atomically $ do
         releaseFork leftNum left
         releaseFork rightNum right
 
-    delay2 <- randomRIO (1, 10)
-    threadDelay (delay2 * 1000000)
+    sleepDelay <- randomRIO (1, 10)
+    threadDelay (sleepDelay * 1000000)
 
 startPhilosophers :: [IO ()] -> IO ()
 startPhilosophers = mapM_ forkIO
