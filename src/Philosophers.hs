@@ -3,16 +3,18 @@ module Philosophers (runPhilosopher, startPhilosophers) where
 import Control.Monad            (forever)
 import Control.Concurrent       (threadDelay, forkIO)
 import Control.Concurrent.STM   (atomically)
-
 import Forks                    (Fork, takeFork, releaseFork)
 
 type Name = String
 
 eatDelay :: Int
-eatDelay = 10
+eatDelay = 5000000
+
+thinkDelay :: Int
+thinkDelay = 10000000
 
 sleepDelay :: Int
-sleepDelay = 30
+sleepDelay = 30000000
 
 runPhilosopher :: Name -> (Fork, Fork) -> IO ()
 runPhilosopher name (left, right) = forever $ do
@@ -26,14 +28,14 @@ runPhilosopher name (left, right) = forever $ do
         return (leftNum, rightNum)
 
     putStrLn (name ++ " got forks " ++ show leftNum ++ " and " ++ show rightNum ++ " and is now eating.")
-    threadDelay (eatDelay * 1000000)
+    threadDelay eatDelay
     putStrLn (name ++ " is done eating. Going back to thinking.")
 
     atomically $ do
         releaseFork leftNum left
         releaseFork rightNum right
 
-    threadDelay (sleepDelay * 1000000)
+    threadDelay sleepDelay
 
 startPhilosophers :: [IO ()] -> IO ()
 startPhilosophers = mapM_ forkIO
