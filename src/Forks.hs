@@ -1,4 +1,4 @@
-module Forks where
+module Forks (Fork, newFork, takeFork, releaseFork) where
 
 import Control.Concurrent.STM   (TMVar, STM, newTMVarIO, takeTMVar, putTMVar)
 
