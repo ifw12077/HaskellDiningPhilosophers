@@ -1,4 +1,4 @@
-module Philosophers (runPhilosopher, startPhilosophers) where
+module Philosophers (philosophers, runPhilosopher, startPhilosophers) where
 
 import Control.Monad            (forever)
 import Control.Concurrent       (threadDelay, forkIO)
@@ -6,6 +6,9 @@ import Control.Concurrent.STM   (atomically)
 import Forks                    (Fork, takeFork, releaseFork)
 
 type Name = String
+
+philosophers :: [String]
+philosophers = ["Aristotle", "Kant", "Spinoza", "Marx", "Russel"]
 
 eatDelay :: Int
 eatDelay = 5000000
