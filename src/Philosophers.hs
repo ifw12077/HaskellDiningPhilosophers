@@ -2,6 +2,7 @@ module Philosophers (runPhilosopher, startPhilosophers) where
 
 import Control.Monad            (forever)
 import Control.Concurrent       (threadDelay, forkIO)
+import Seats                    (Seat)
 
 type Name = String
 
@@ -14,8 +15,8 @@ thinkDelay = 10000000
 sleepDelay :: Int
 sleepDelay = 30000000
 
-runPhilosopher :: Name -> IO ()
-runPhilosopher name = forever $ do
+runPhilosopher :: Name -> [Seat] -> IO ()
+runPhilosopher name seats = forever $ do
     putStrLn (name ++ " is hungry.")
 
     -- Run the transactional action atomically.
