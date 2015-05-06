@@ -17,9 +17,10 @@ main = do
 
     seats <- mapM newSeat $ zip [1..numberOfSeats] forkPairs
 
-    let philosophers        = map (("Philosopher " ++) . show) [1..numberOfPhilosophers]
-        namedPhilosophers   = map runPhilosopher philosophers
-        philosophersAtTable = zipWith ($) namedPhilosophers seats
+    let namedPhilosophers       = map (("Philosopher " ++) . show) [1..numberOfPhilosophers]
+        philosophers            = map runPhilosopher namedPhilosophers
+        table                   = map (:[]) seats
+        philosophersAtTable     = zipWith ($) philosophers table
 
     putStrLn "Running the philosophers. Press enter to quit."
 
