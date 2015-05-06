@@ -1,8 +1,9 @@
-module Forks (Fork, newFork, takeFork, releaseFork) where
+module Forks (Fork, Forkpair, newFork, takeFork, releaseFork) where
 
 import Control.Concurrent.STM   (TMVar, STM, newTMVarIO, takeTMVar, putTMVar)
 
 type Fork = TMVar Int
+type Forkpair = (Fork, Fork)
 
 newFork :: Int -> IO Fork
 newFork i = newTMVarIO i
