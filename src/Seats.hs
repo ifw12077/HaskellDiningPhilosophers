@@ -8,7 +8,7 @@ type Seat = TMVar (Int, Forkpair)
 newSeat :: (Int, Forkpair) -> IO Seat
 newSeat (i, forks) = newTMVarIO (i, forks)
 
--- The basic transactional operations on forks
+-- The basic transactional operations on seats
 takeSeat :: Seat -> STM (Int, Forkpair)
 takeSeat seat = takeTMVar seat
 

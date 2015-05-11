@@ -29,6 +29,7 @@ runPhilosopher name seats = forever $ do
     --putStrLn (name ++ " got forks " ++ show leftNum ++ " and " ++ show rightNum ++ " and is now eating.")
     threadDelay eatDelay
     putStrLn (name ++ " is done eating. Going back to thinking.")
+    threadDelay thinkDelay
 
     --atomically $ do
     --    releaseFork leftNum left
