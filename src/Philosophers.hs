@@ -1,8 +1,11 @@
-module Philosophers (runPhilosopher, startPhilosophers) where
+module Philosophers (Name, runPhilosopher, startPhilosophers) where
 
 import Control.Monad            (forever)
 import Control.Concurrent       (threadDelay, forkIO)
-import Seats                    (Seat)
+import Data.List                (find)
+import Data.Maybe               (isJust)
+import System.Random            (randomRIO)
+import Seats                    (Seat, tryTakeSeat, takeSeat, releaseSeat)
 
 type Name = String
 
@@ -17,25 +20,29 @@ sleepDelay = 30000000
 
 runPhilosopher :: Name -> [Seat] -> IO ()
 runPhilosopher name seats = forever $ do
-    putStrLn (name ++ " is hungry.")
-
-    -- Run the transactional action atomically.
-    -- The type system ensures this is the only way to run transactional actions.
-    --(leftNum, rightNum) <- atomically $ do
-    --    leftNum <- takeFork left
-    --    rightNum <- takeFork right
-    --    return (leftNum, rightNum)
-
-    --putStrLn (name ++ " got forks " ++ show leftNum ++ " and " ++ show rightNum ++ " and is now eating.")
-    threadDelay eatDelay
-    putStrLn (name ++ " is done eating. Going back to thinking.")
-    threadDelay thinkDelay
-
-    --atomically $ do
-    --    releaseFork leftNum left
-    --   releaseFork rightNum right
-
-    threadDelay sleepDelay
+    putStrLn (name ++ " is born.")
+    startDay name seats 0 0
 
 startPhilosophers :: [IO ()] -> IO ()
 startPhilosophers = mapM_ forkIO
+
+startDay :: Name -> [Seat] -> Int -> Int -> IO ()
+startDay name seats day days = do
+    putStrLn (name ++ " is thinking.")
+    threadDelay thinkDelay
+    startEating name seats
+    if (day + 1) > 3
+    then do
+        putStrLn (name ++ " finished day " ++ show days)
+        threadDelay sleepDelay
+        startDay name seats 0 (days + 1)
+    else startDay name seats (day + 1) days
+
+startEating :: Name -> [Seat] -> IO ()
+startEating name seats = do
+    seat <- find (\x -> isJust (tryTakeSeat x)) seats
+    case seat of
+        Nothing     -> do
+            mySeatNumber <- randomRIO (1, length seats)
+            takeSeat 
+        Just place  -> putStrLn ""

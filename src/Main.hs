@@ -1,6 +1,6 @@
 module Main where
 
-import Help         (prompt)
+import Help         (prompt, unite)
 import Forks        (newFork)
 import Seats        (newSeat)
 import Philosophers (runPhilosopher, startPhilosophers)
@@ -18,13 +18,11 @@ main = do
     seats <- mapM newSeat $ zip [1..numberOfSeats] forkPairs
 
     let namedPhilosophers       = map (("Philosopher " ++) . show) [1..numberOfPhilosophers]
-        philosophers            = map runPhilosopher namedPhilosophers
-        table                   = map (:[]) seats
-        philosophersAtTable     = zipWith ($) philosophers table
+        philosophers            = unite runPhilosopher namedPhilosophers seats
 
     putStrLn "Running the philosophers. Press enter to quit."
 
-    startPhilosophers philosophersAtTable
+    startPhilosophers philosophers
 
     -- All threads exit when the main thread exits.
     getLine
