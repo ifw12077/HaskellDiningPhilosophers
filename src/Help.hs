@@ -17,7 +17,7 @@ prompt x = do
 maybeRead :: Read a => String -> Maybe a
 maybeRead = fmap fst . listToMaybe . filter (null . snd) . reads
 
-unite :: (Name -> [Seat] -> IO ()) -> [Name] -> [Seat] -> [IO()]
+unite :: (Name -> [(Int, Seat)] -> IO ()) -> [Name] -> [(Int, Seat)] -> [IO()]
 unite runphil philos seats
     | null phils        = []
     | length phils == 1 = [runphil phil seats]
