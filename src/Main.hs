@@ -1,24 +1,27 @@
 module Main where
 
-import Help         (prompt, unite)
+import Help         (prompt, unite, set)
 import Forks        (newFork)
 import Seats        (newSeat)
 import Philosophers (runPhilosopher, startPhilosophers)
 
 main :: IO String
 main = do
-    numberOfPhilosophers <- prompt "How many philosophers?"
+    numberOfPhilosophers    <- prompt "How many philosophers?"
 
-    numberOfSeats <- prompt "How many seats?"
+    numberOfSeats           <- prompt "How many seats?"
 
-    forks <- mapM newFork [1..numberOfSeats]
+    let nrSeats             = [1..numberOfSeats]
 
-    let forkPairs = zip forks $ tail . cycle $ forks
+    forks                   <- mapM newFork nrSeats
 
-    seats <- mapM newSeat $ zip [1..numberOfSeats] forkPairs
+    let forkPairs           = zip forks $ tail . cycle $ forks
 
-    let namedPhilosophers       = map (("Philosopher " ++) . show) [1..numberOfPhilosophers]
-        philosophers            = unite runPhilosopher namedPhilosophers seats
+    seats                   <- mapM newSeat $ zip nrSeats forkPairs
+
+    let namedPhilosophers   = map (("Philosopher " ++) . show) [1..numberOfPhilosophers]
+        table               = set nrSeats seats
+        philosophers        = unite runPhilosopher namedPhilosophers table
 
     putStrLn "Running the philosophers. Press enter to quit."
 

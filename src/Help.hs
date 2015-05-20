@@ -1,4 +1,4 @@
-module Help (prompt, unite) where
+module Help (prompt, unite, set) where
 
 import Data.Maybe   (listToMaybe)
 import Seats        (Seat)
@@ -19,8 +19,19 @@ maybeRead = fmap fst . listToMaybe . filter (null . snd) . reads
 
 unite :: (Name -> [Seat] -> IO ()) -> [Name] -> [Seat] -> [IO()]
 unite runphil philos seats
-    | length phils == 0 = []
+    | null phils        = []
     | length phils == 1 = [runphil phil seats]
-    | otherwise = runphil phil seats : unite runphil phils seats
-    where phil = head philos
+    | otherwise         = runphil phil seats : unite runphil phils seats
+    where phil  = head philos
           phils = tail philos
+
+set :: [Int] -> [Seat] -> [(Int, Seat)]
+set places seats
+    | null seats || null places                 = []
+    | length seats /= length places             = []
+    | length seats == 1 && length places == 1   = [(place, seat)]
+    | otherwise                                 = (place, seat) : set places' seats'
+    where place     = head places
+          seat      = head seats
+          places'   = tail places
+          seats'    = tail seats

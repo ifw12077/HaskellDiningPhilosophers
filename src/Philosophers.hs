@@ -5,12 +5,12 @@ import Control.Concurrent       (threadDelay, forkIO)
 import Data.List                (find)
 import Data.Maybe               (isJust)
 import System.Random            (randomRIO)
-import Seats                    (Seat, tryTakeSeat, takeSeat, releaseSeat)
+import Seats                    (Seat, tryTakeSeat) --, takeSeat, releaseSeat)
 
 type Name = String
 
-eatDelay :: Int
-eatDelay = 5000000
+--eatDelay :: Int
+--eatDelay = 5000000
 
 thinkDelay :: Int
 thinkDelay = 10000000
@@ -18,7 +18,7 @@ thinkDelay = 10000000
 sleepDelay :: Int
 sleepDelay = 30000000
 
-runPhilosopher :: Name -> [Seat] -> IO ()
+runPhilosopher :: Name -> [(Int, Seat)] -> IO ()
 runPhilosopher name seats = forever $ do
     putStrLn (name ++ " is born.")
     startDay name seats 0 0
@@ -26,7 +26,7 @@ runPhilosopher name seats = forever $ do
 startPhilosophers :: [IO ()] -> IO ()
 startPhilosophers = mapM_ forkIO
 
-startDay :: Name -> [Seat] -> Int -> Int -> IO ()
+startDay :: Name -> [(Int, Seat)] -> Int -> Int -> IO ()
 startDay name seats day days = do
     putStrLn (name ++ " is thinking.")
     threadDelay thinkDelay
@@ -38,11 +38,11 @@ startDay name seats day days = do
         startDay name seats 0 (days + 1)
     else startDay name seats (day + 1) days
 
-startEating :: Name -> [Seat] -> IO ()
+startEating :: Name -> [(Int, Seat)] -> IO ()
 startEating name seats = do
-    seat <- find (\x -> isJust (tryTakeSeat x)) seats
+    let seat = find (isJust . tryTakeSeat . snd) seats
     case seat of
-        Nothing     -> do
+        Nothing             -> do
             mySeatNumber <- randomRIO (1, length seats)
-            takeSeat 
-        Just place  -> putStrLn ""
+            putStrLn ""
+        Just (place, forks) -> putStrLn ""
