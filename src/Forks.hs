@@ -6,11 +6,11 @@ type Fork = TMVar Int
 type Forkpair = (Fork, Fork)
 
 newFork :: Int -> IO Fork
-newFork i = newTMVarIO i
+newFork = newTMVarIO
 
 -- The basic transactional operations on forks
 takeFork :: Fork -> STM Int
-takeFork fork = takeTMVar fork
+takeFork = takeTMVar
 
 releaseFork :: Int -> Fork -> STM ()
 releaseFork i fork = putTMVar fork i

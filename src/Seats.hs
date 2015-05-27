@@ -7,14 +7,14 @@ import Forks                    (Forkpair)
 type Seat = TMVar (Int, Forkpair)
 
 newSeat :: (Int, Forkpair) -> IO Seat
-newSeat (i, forks) = newTMVarIO (i, forks)
+newSeat = newTMVarIO
 
 -- The basic transactional operations on seats
 tryTakeSeat :: Seat -> STM (Maybe (Int, Forkpair))
-tryTakeSeat seat = tryTakeTMVar seat
+tryTakeSeat = tryTakeTMVar
 
 takeSeat :: Seat -> STM (Int, Forkpair)
-takeSeat seat = takeTMVar seat
+takeSeat = takeTMVar
 
 releaseSeat :: [(Int, Seat)] -> (Int, Forkpair) -> IO ()
 releaseSeat (seat:seats) (number, forks)
