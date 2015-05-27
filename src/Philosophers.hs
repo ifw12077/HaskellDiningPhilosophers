@@ -2,21 +2,19 @@ module Philosophers (Name, runPhilosopher, startPhilosophers) where
 
 import Control.Monad            (forever)
 import Control.Concurrent       (threadDelay, forkIO)
-import Data.List                (find)
-import Data.Maybe               (isJust)
-import System.Random            (randomRIO)
-import Seats                    (Seat, tryTakeSeat) --, takeSeat, releaseSeat)
+import Seats                    (Seat, getSeat, releaseSeat)
+import Forks                    (getForks, releaseForks)
 
 type Name = String
 
---eatDelay :: Int
---eatDelay = 5000000
+eatDelay :: Int
+eatDelay = 500000
 
 thinkDelay :: Int
-thinkDelay = 10000000
+thinkDelay = 1000000
 
 sleepDelay :: Int
-sleepDelay = 30000000
+sleepDelay = 3000000
 
 runPhilosopher :: Name -> [(Int, Seat)] -> IO ()
 runPhilosopher name seats = forever $ do
@@ -40,9 +38,10 @@ startDay name seats day days = do
 
 startEating :: Name -> [(Int, Seat)] -> IO ()
 startEating name seats = do
-    let seat = find (isJust . tryTakeSeat . snd) seats
-    case seat of
-        Nothing             -> do
-            mySeatNumber <- randomRIO (1, length seats)
-            putStrLn ""
-        Just (place, forks) -> putStrLn ""
+    (place, forks) <- getSeat seats
+    putStrLn (name ++ " got seat " ++ show place ++ ".")
+    (left, right) <- getForks forks
+    putStrLn (name ++ " got forks " ++ show left ++ " and " ++ show right ++ " and is now eating.")
+    threadDelay eatDelay
+    releaseForks forks (left, right)
+    releaseSeat seats (place, forks)
